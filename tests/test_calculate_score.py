@@ -142,4 +142,4 @@ def test_six_ones():
 )
 def test_all(test_input, expected):
     actual = GameLogic.calculate_score(test_input)
-    assert actual ==
+    assert actual == expected
