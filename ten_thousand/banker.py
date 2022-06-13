@@ -19,4 +19,5 @@ class Banker:
 
     ###################
     # Clear Shelf method - Adbelrahman Refai
-    ###################
+    def clear_shelf(self):
+        self.shelved = 0
