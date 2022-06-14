@@ -17,7 +17,7 @@ class GameLogic:
 
 
         cont = 0
-        if args == (1, 2, 3, 4, 5, 6) or args.count(True)==3:
+        if args == (1, 2, 3, 4, 5, 6) or T.count(True)==3:
             cont = 1500
 
         else:
