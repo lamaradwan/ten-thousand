@@ -5,6 +5,8 @@ class GameLogic:
 
     @staticmethod
     def calculate_score(args):
+        args1=sorted(args)
+
 
         a1=args.count(1)==2
         a2=args.count(2)==2
@@ -17,7 +19,7 @@ class GameLogic:
 
 
         cont = 0
-        if args == (1, 2, 3, 4, 5, 6) or T.count(True)==3:
+        if args1 == [1, 2, 3, 4, 5, 6] or T.count(True)==3:
             cont = 1500
 
         else:
@@ -40,6 +42,7 @@ class GameLogic:
                 cont += 500 * (args.count(5) - 2)
         return cont
 
+
 ###################
 #Roll-Dice method - Lama Radwan
     @staticmethod
@@ -52,4 +55,4 @@ class GameLogic:
 ###################
 
 if __name__=="__main__":
-    print(GameLogic.calculate_score((1, 1, 1, 5, 5)))
+    print(GameLogic.calculate_score((1, 6, 3, 2, 5, 4)))
