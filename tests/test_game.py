@@ -20,8 +20,14 @@ def test_bank_one_roll_then_quit():
     diffs = diff(game.play, 'version_2/bank_one_roll_then_quit.sim.txt')
     assert not diffs, diffs
 
-def test_repeate_roller():
-    """Allow setting aside scoring dice and rolling the rest
-        """
-    diffs = diff(Game().play, path = 'tests/version_2/repeat_roller.sim.txt')
+
+def test_repeat_roller():
+    game = Game()
+    diffs = diff(game.play, 'version_2/repeat_roller.sim.txt')
+    assert not diffs, diffs
+
+
+def test_bank_first_for_two_rounds():
+    game = Game()
+    diffs = diff(game.play, 'version_2/bank_first_for_two_rounds.sim.txt')
     assert not diffs, diffs
