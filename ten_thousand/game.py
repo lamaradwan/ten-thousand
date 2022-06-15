@@ -6,7 +6,7 @@ class Game:
     def __init__(self):
         self.round_counter = 1
 
-    def new_round(self, round_counter, banker, user_answer, roller=GameLogic.roll_dice):
+    def new_round(self, round_counter, banker, user_answer,new_roller_2, roller=GameLogic.roll_dice):
         user_answer_list = (tuple(map(int, user_answer)))
         unbanked_scored_points = GameLogic.calculate_score(user_answer_list)
         print(f"You have {unbanked_scored_points} unbanked points and 5 dice remaining")
@@ -19,12 +19,13 @@ class Game:
             self.round_counter += 1
         print(f"Starting round {self.round_counter}")
         print('Rolling 6 dice...')
-        new_roller = roller(6)
+        # new_roller = roller(6)
         # roller=roller()
-        formatted_roller = ' '.join([str(i) for i in new_roller])
+        formatted_roller = ' '.join([str(i) for i in new_roller_2])
         print(f'*** {formatted_roller} ***')
         print('Enter dice to keep, or (q)uit:')
         user_answer_2 = input('> ')
+
         return user_answer_2
 
     def play(self, roller=GameLogic.roll_dice):
@@ -45,8 +46,10 @@ class Game:
             user_answer = input('> ')
 
             while user_answer != "q":
+                new_roller_2 = roller(6)
+
                 # bank one roll then quit -- Ahmad Zaid---Lama Radwan
-                new_user_input = self.new_round(self.round_counter, banker, user_answer)
+                new_user_input = self.new_round(self.round_counter, banker, user_answer, new_roller_2)
                 if new_user_input != 'r':
                     # here you should implement the repeat roller simulation file
                     break
