@@ -5,12 +5,14 @@ from ten_thousand.banker import Banker
 class Game:
     def __init__(self):
         self.round_counter = 1
+        self.dice_remaining = 6
         #############################
         # Ahmad And Lama
 
     def starting_round(self, round_counter, roller, roller_1=GameLogic.roll_dice):
-        print(f'Starting round {round_counter}')
-        print('Rolling 6 dice...')
+        if len(roller) == 6:
+            print(f'Starting round {round_counter}')
+        print(f'Rolling {self.dice_remaining} dice...')
         new_roller = roller
         formatted_roller = ' '.join([str(i) for i in new_roller])
         print(f'*** {formatted_roller} ***')
@@ -24,15 +26,18 @@ class Game:
     def bank(self, banker, user_answer, round_counter):
         # Define the tuple to calculate the unbanked score
         user_answer_list = (tuple(map(int, user_answer)))
+        self.dice_remaining -= len(user_answer)
         unbanked_scored_points = GameLogic.calculate_score(user_answer_list)
-        print(f"You have {unbanked_scored_points} unbanked points and 5 dice remaining")
+        banker.shelved += unbanked_scored_points
+        print(f"You have {banker.shelved} unbanked points and {self.dice_remaining} dice remaining")
         print("(r)oll again, (b)ank your points or (q)uit:")
         user_answer = input("> ")
         if user_answer == "b":
-            banker.shelf(unbanked_scored_points)
+            self.dice_remaining = 6
             print(f"You banked {banker.shelved} points in round {round_counter}")
             print(f"Total score is {banker.bank()} points")
             self.round_counter += 1
+
         return user_answer
 
     #############################
@@ -55,49 +60,13 @@ class Game:
                 if new_user_input == 'q':
                     break
                 x = self.bank(banker, new_user_input, self.round_counter)
-
+                if x == "r":
+                    new_roller = roller(self.dice_remaining)
+                    new_user_input = self.starting_round(self.round_counter, new_roller)
+                    self.bank(banker, new_user_input, self.round_counter)
             print(f'Thanks for playing. You earned {banker.balance} points')
-    #############################
 
     #############################
-
-    # Mohammad and Abd
-
-    def start_round(self, round, num_dice = 6):
-        print(f"starting round {round}")
-
-        round_score = 0
-
-        while True:
-            roll = self.roll_dice(num_dice)
-
-            keepers = self.handle_keepers(roll)
-
-            print("(r)oll again, (b)ank your points or (q)uit:")
-            roll_again_response = input("> ")
-            if roll_again_response == "q":
-
-                self.quit_game()
-                return
-
-            elif roll_again_response == "b":
-
-                round_score = self.banker.bank()
-
-                break
-
-            else:
-
-                num_dice -= len(keepers)
-
-                if num_dice == 0:
-                    num_dice = 6
-
-            print(f"You banked {str(round_score)} points in round {round}")
-
-
-    def handle_keepers(self, roll):
-        pass
     #############################
 
 if __name__ == '__main__':

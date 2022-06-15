@@ -12,7 +12,6 @@ class Banker:
     ###################
     # Bank method - Mohammad Abu mazen
     def bank(self):
-        self.balance = 0
         self.balance += self.shelved
         self.shelved = 0
         return self.balance
