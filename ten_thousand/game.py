@@ -59,6 +59,46 @@ class Game:
             print(f'Thanks for playing. You earned {banker.balance} points')
     #############################
 
+    #############################
+
+    # Mohammad and Abd
+
+    def start_round(self, round, num_dice = 6):
+        print(f"starting round {round}")
+
+        round_score = 0
+
+        while True:
+            roll = self.roll_dice(num_dice)
+
+            keepers = self.handle_keepers(roll)
+
+            print("(r)oll again, (b)ank your points or (q)uit:")
+            roll_again_response = input("> ")
+            if roll_again_response == "q":
+
+                self.quit_game()
+                return
+
+            elif roll_again_response == "b":
+
+                round_score = self.banker.bank()
+
+                break
+
+            else:
+
+                num_dice -= len(keepers)
+
+                if num_dice == 0:
+                    num_dice = 6
+
+            print(f"You banked {str(round_score)} points in round {round}")
+
+
+    def handle_keepers(self, roll):
+        pass
+    #############################
 
 if __name__ == '__main__':
     game = Game()
