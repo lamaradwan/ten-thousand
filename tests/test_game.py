@@ -1,4 +1,4 @@
-from ten_thousand.refactor_game import Game
+from ten_thousand.game import Game
 from tests.flo import diff
 import pytest
 
