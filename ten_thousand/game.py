@@ -63,11 +63,14 @@ class Game:
                 if x == "r":
                     new_roller = roller(self.dice_remaining)
                     new_user_input = self.starting_round(self.round_counter, new_roller)
-                    self.bank(banker, new_user_input, self.round_counter)
+                    if new_user_input == "q":
+                        break
+                    new_user_input = self.bank(banker, new_user_input, self.round_counter)
             print(f'Thanks for playing. You earned {banker.balance} points')
 
     #############################
     #############################
+
 
 if __name__ == '__main__':
     game = Game()
