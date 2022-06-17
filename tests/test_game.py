@@ -31,3 +31,9 @@ def test_bank_first_for_two_rounds():
     game = Game()
     diffs = diff(game.play, 'tests/version_2/bank_first_for_two_rounds.sim.txt')
     assert not diffs, diffs
+
+
+def test_hot_dices():
+    game = Game()
+    diffs = diff(game.play, 'tests/version_2/hot_dice.sim.txt')
+    assert not diffs, diffs

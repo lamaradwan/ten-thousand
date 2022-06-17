@@ -23,6 +23,7 @@ class Game:
         self.round_counter = 1
         self.dice_remaining = 6
         self.user_answer = ""
+        self.is_hot_dice = True
         self.banker = Banker()
 
     def starting_round(self, roller):
@@ -33,7 +34,7 @@ class Game:
         | :return: No output
         """
 
-        if len(roller) == 6:
+        if len(roller) == 6 and self.is_hot_dice:
             print(f'Starting round {self.round_counter}')
 
         self.roll_dices(roller)
@@ -54,7 +55,7 @@ class Game:
         self.user_answer = input("> ")
 
         if self.user_answer == "b":
-            self.dice_remaining = 6
+            self.dice_remaining = self.is_hot_dice = 6
             self.banked_and_total_points_msg()
             self.round_counter += 1
 
@@ -79,6 +80,7 @@ class Game:
                 if self.user_answer == "q":
                     break
                 self.bank()
+                self.is_remaining_dices_zero()
 
             self.final_score_msg()
 
@@ -102,6 +104,11 @@ class Game:
 
     def final_score_msg(self):
         print(f"Thanks for playing. You earned {self.banker.balance} points")
+
+    def is_remaining_dices_zero(self):
+        if self.dice_remaining == 0:
+            self.dice_remaining = 6
+            self.is_hot_dice = False
 
 
 if __name__ == "__main__":
