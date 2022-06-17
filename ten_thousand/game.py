@@ -1,77 +1,109 @@
 from ten_thousand.game_logic import GameLogic
 from ten_thousand.banker import Banker
 
+"""
+# IMPORTANT: 
+
+1- before you start work, get the updated version of the project by applying this command (git pull origin main)
+
+2- When ever you are adding new feature to this project,always create a branch and make the branch name meaningful,
+don't name it saleh,Sara ,etc..
+
+3- test the code before you push it to Github by applying this command pytest -v , to make sure that your work doesn't
+effect the previous work
+
+4- if all the tests passes ,you can push your branch and merge it 
+
+"""
+
 
 class Game:
+
     def __init__(self):
         self.round_counter = 1
         self.dice_remaining = 6
-        #############################
-        # Ahmad And Lama
+        self.user_answer = ""
+        self.banker = Banker()
 
-    def starting_round(self, round_counter, roller, roller_1=GameLogic.roll_dice):
+    def starting_round(self, roller):
+        """
+        | This Function Will Be Called In Each New Roll, A Tuple With Random Numbers Between 1 And 6 Will Be Passed To
+        | This Function,The Tuple Length Depending On The Remaining Dices
+        | :param roller:
+        | :return: No output
+        """
+
         if len(roller) == 6:
-            print(f'Starting round {round_counter}')
-        print(f'Rolling {self.dice_remaining} dice...')
-        new_roller = roller
-        formatted_roller = ' '.join([str(i) for i in new_roller])
-        print(f'*** {formatted_roller} ***')
-        print('Enter dice to keep, or (q)uit:')
-        new_user_input = input("> ")
-        return new_user_input
-        #############################
+            print(f'Starting round {self.round_counter}')
 
-    #############################
-    # Ahmad And Lama
-    def bank(self, banker, user_answer, round_counter):
-        # Define the tuple to calculate the unbanked score
-        user_answer_list = (tuple(map(int, user_answer)))
-        self.dice_remaining -= len(user_answer)
-        unbanked_scored_points = GameLogic.calculate_score(user_answer_list)
-        banker.shelved += unbanked_scored_points
-        print(f"You have {banker.shelved} unbanked points and {self.dice_remaining} dice remaining")
-        print("(r)oll again, (b)ank your points or (q)uit:")
-        user_answer = input("> ")
-        if user_answer == "b":
+        self.roll_dices(roller)
+        print('Enter dice to keep, or (q)uit:')
+        self.user_answer = input("> ")
+
+    def bank(self):
+        """
+        This Function Will Called It Each Roll To Calculate The Total Score And Check If The Player Wants To Bank The
+        Shelved Points Or Not
+        :return: No Output
+        """
+
+        self.user_answer = (tuple(map(int, self.user_answer)))
+        self.dice_remaining -= len(self.user_answer)
+        self.banker.shelved += GameLogic.calculate_score(self.user_answer)
+        self.show_shelf_points_and_options()
+        self.user_answer = input("> ")
+
+        if self.user_answer == "b":
             self.dice_remaining = 6
-            print(f"You banked {banker.shelved} points in round {round_counter}")
-            print(f"Total score is {banker.bank()} points")
+            self.banked_and_total_points_msg()
             self.round_counter += 1
 
-        return user_answer
-
-    #############################
-
-    #############################
-    # Ahmad And Lama
     def play(self, roller=GameLogic.roll_dice):
-        print('Welcome to Ten Thousand')
-        print('(y)es to play or (n)o to decline')
-        user_answer = input('> ')
-        if user_answer == 'n':
-            print('OK. Maybe another time')
+        """
+        This Function Is the Starting Point Of The Game, And It Will Keep The Game Running Until The Player Press q And
+        Terminate The Game
+        :param roller:
+        :return: No output
+        """
+
+        self.welcome_msg()
+        self.user_answer = input('> ')
+        if self.user_answer == "n":
+            print("OK. Maybe another time")
+
         else:
-            banker = Banker()
-            new_user_input = ""
-            x = ''
-            while new_user_input != "q" and x != 'q':
-                new_roller = roller(6)
-                new_user_input = self.starting_round(self.round_counter, new_roller)
-                if new_user_input == 'q':
+            self.user_answer = "r"
+            while self.user_answer == "r" or self.user_answer == "b":
+                new_roller = roller(self.dice_remaining)
+                self.starting_round(new_roller)
+                if self.user_answer == "q":
                     break
-                x = self.bank(banker, new_user_input, self.round_counter)
-                if x == "r":
-                    new_roller = roller(self.dice_remaining)
-                    new_user_input = self.starting_round(self.round_counter, new_roller)
-                    if new_user_input == "q":
-                        break
-                    new_user_input = self.bank(banker, new_user_input, self.round_counter)
-            print(f'Thanks for playing. You earned {banker.balance} points')
+                self.bank()
 
-    #############################
-    #############################
+            self.final_score_msg()
+
+    @staticmethod
+    def welcome_msg():
+        print("Welcome to Ten Thousand")
+        print("(y)es to play or (n)o to decline")
+
+    def roll_dices(self, roller):
+        print(f"Rolling {self.dice_remaining} dice...")
+        formatted_roller = " ".join([str(i) for i in roller])
+        print(f"*** {formatted_roller} ***")
+
+    def show_shelf_points_and_options(self):
+        print(f"You have {self.banker.shelved} unbanked points and {self.dice_remaining} dice remaining")
+        print("(r)oll again, (b)ank your points or (q)uit:")
+
+    def banked_and_total_points_msg(self):
+        print(f"You banked {self.banker.shelved} points in round {self.round_counter}")
+        print(f"Total score is {self.banker.bank()} points")
+
+    def final_score_msg(self):
+        print(f"Thanks for playing. You earned {self.banker.balance} points")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     game = Game()
     game.play()
