@@ -37,3 +37,9 @@ def test_hot_dices():
     game = Game()
     diffs = diff(game.play, '../tests/version_2/hot_dice.sim.txt')
     assert not diffs, diffs
+
+
+def test_zilch():
+    game = Game()
+    diffs = diff(game.play, '../tests/version_3/zilcher.sim.txt')
+    assert not diffs, diffs

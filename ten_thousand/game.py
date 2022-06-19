@@ -26,14 +26,14 @@ class Game:
         self.is_hot_dice = True
         self.banker = Banker()
 
-    def starting_round(self, roller):
+    def starting_round(self, roller, roller_function=GameLogic.roll_dice):
         """
         | This Function Will Be Called In Each New Roll, A Tuple With Random Numbers Between 1 And 6 Will Be Passed To
         | This Function,The Tuple Length Depending On The Remaining Dices
         | :param roller:
         | :return: No output
         """
-
+        roller = self.got_zilch(roller, roller_function)
         if len(roller) == 6 and self.is_hot_dice:
             print(f'Starting round {self.round_counter}')
 
@@ -58,8 +58,7 @@ class Game:
         if self.user_answer == "b":
             self.dice_remaining = 6
             self.is_hot_dice = True
-            print(f"You banked {self.banker.shelved} points in round {self.round_counter}")
-            print(f"Total score is {self.banker.bank()} points")
+            self.banked_and_total_points_msg()
             self.round_counter += 1
 
     def play(self, roller=GameLogic.roll_dice):
@@ -79,17 +78,36 @@ class Game:
         else:
             while self.user_answer == "r" or self.user_answer == "b" or self.user_answer == 'y':
                 new_roller = roller(self.dice_remaining)
-                self.starting_round(new_roller)
+                self.starting_round(new_roller, roller)
                 if self.user_answer == "q":
                     break
                 self.bank()
                 self.is_remaining_dices_zero()
             print(f"Thanks for playing. You earned {self.banker.balance} points")
 
-    # @staticmethod
-    # def welcome_msg():
-    #     print("Welcome to Ten Thousand")
-    #     print("(y)es to play or (n)o to decline")
+    def got_zilch(self, roll, roller_function):
+        """
+        This function will check if the rolling dice don't have any scoring dice, if yes zilch message will be printed
+        to the player.
+
+        This function take two parameters: roll: random tuple, roller_function: generate a new random tuple
+        :param roll:
+        :param roller_function:
+        :return: random tuple
+        """
+        score = GameLogic.calculate_score(roll)
+        if score == 0:
+            self.roll_dices(roll)
+            print("*" * 40)
+            print("**        Zilch!!! Round over         **")
+            print("*" * 40)
+            self.banker.clear_shelf()
+            self.banked_and_total_points_msg()
+            self.dice_remaining = 6
+            self.round_counter += 1
+            new_roller = roller_function(6)
+            return new_roller
+        return roll
 
     def roll_dices(self, roller):
         print(f"Rolling {self.dice_remaining} dice...")
@@ -100,12 +118,9 @@ class Game:
     #     print(f"You have {self.banker.shelved} unbanked points and {self.dice_remaining} dice remaining")
     #     print("(r)oll again, (b)ank your points or (q)uit:")
 
-    # def banked_and_total_points_msg(self):
-    #     print(f"You banked {self.banker.shelved} points in round {self.round_counter}")
-    #     print(f"Total score is {self.banker.bank()} points")
-
-    # def final_score_msg(self):
-    #     print(f"Thanks for playing. You earned {self.banker.balance} points")
+    def banked_and_total_points_msg(self):
+        print(f"You banked {self.banker.shelved} points in round {self.round_counter}")
+        print(f"Total score is {self.banker.bank()} points")
 
     def is_remaining_dices_zero(self):
         if self.dice_remaining == 0:
