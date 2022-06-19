@@ -51,12 +51,15 @@ class Game:
         self.user_answer = (tuple(map(int, self.user_answer)))
         self.dice_remaining -= len(self.user_answer)
         self.banker.shelved += GameLogic.calculate_score(self.user_answer)
-        self.show_shelf_points_and_options()
+        print(f"You have {self.banker.shelved} unbanked points and {self.dice_remaining} dice remaining")
+        print("(r)oll again, (b)ank your points or (q)uit:")
         self.user_answer = input("> ")
 
         if self.user_answer == "b":
-            self.dice_remaining = self.is_hot_dice = 6
-            self.banked_and_total_points_msg()
+            self.dice_remaining = 6
+            self.is_hot_dice = True
+            print(f"You banked {self.banker.shelved} points in round {self.round_counter}")
+            print(f"Total score is {self.banker.bank()} points")
             self.round_counter += 1
 
     def play(self, roller=GameLogic.roll_dice):
@@ -67,43 +70,42 @@ class Game:
         :return: No output
         """
 
-        self.welcome_msg()
+        print("Welcome to Ten Thousand")
+        print("(y)es to play or (n)o to decline")
         self.user_answer = input('> ')
         if self.user_answer == "n":
             print("OK. Maybe another time")
 
         else:
-            self.user_answer = "r"
-            while self.user_answer == "r" or self.user_answer == "b":
+            while self.user_answer == "r" or self.user_answer == "b" or self.user_answer == 'y':
                 new_roller = roller(self.dice_remaining)
                 self.starting_round(new_roller)
                 if self.user_answer == "q":
                     break
                 self.bank()
                 self.is_remaining_dices_zero()
+            print(f"Thanks for playing. You earned {self.banker.balance} points")
 
-            self.final_score_msg()
-
-    @staticmethod
-    def welcome_msg():
-        print("Welcome to Ten Thousand")
-        print("(y)es to play or (n)o to decline")
+    # @staticmethod
+    # def welcome_msg():
+    #     print("Welcome to Ten Thousand")
+    #     print("(y)es to play or (n)o to decline")
 
     def roll_dices(self, roller):
         print(f"Rolling {self.dice_remaining} dice...")
         formatted_roller = " ".join([str(i) for i in roller])
         print(f"*** {formatted_roller} ***")
 
-    def show_shelf_points_and_options(self):
-        print(f"You have {self.banker.shelved} unbanked points and {self.dice_remaining} dice remaining")
-        print("(r)oll again, (b)ank your points or (q)uit:")
+    # def show_shelf_points_and_options(self):
+    #     print(f"You have {self.banker.shelved} unbanked points and {self.dice_remaining} dice remaining")
+    #     print("(r)oll again, (b)ank your points or (q)uit:")
 
-    def banked_and_total_points_msg(self):
-        print(f"You banked {self.banker.shelved} points in round {self.round_counter}")
-        print(f"Total score is {self.banker.bank()} points")
+    # def banked_and_total_points_msg(self):
+    #     print(f"You banked {self.banker.shelved} points in round {self.round_counter}")
+    #     print(f"Total score is {self.banker.bank()} points")
 
-    def final_score_msg(self):
-        print(f"Thanks for playing. You earned {self.banker.balance} points")
+    # def final_score_msg(self):
+    #     print(f"Thanks for playing. You earned {self.banker.balance} points")
 
     def is_remaining_dices_zero(self):
         if self.dice_remaining == 0:
