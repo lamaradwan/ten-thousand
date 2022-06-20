@@ -40,6 +40,22 @@ class Game:
         self.roll_dices(roller)
         print('Enter dice to keep, or (q)uit:')
         self.user_answer = input("> ")
+        self.cheating_fix(roller)
+
+    #Lama Radwan, Abdulrahman Mansour, Essa Abu Al-khair
+    def cheating_fix(self, roller):
+        if self.user_answer.isnumeric():
+            userList = (list(map(int, self.user_answer)))
+            # print(roller)
+            for i in userList:
+                if roller.count(i) < userList.count(i):
+                    print("Cheater!!! Or possibly made a typo...")
+                    formatted_roller = " ".join([str(i) for i in roller])
+                    print(f"*** {formatted_roller} ***")
+                    print('Enter dice to keep, or (q)uit:')
+                    self.user_answer = input("> ")
+                    return
+
 
     def bank(self):
         """
@@ -81,10 +97,16 @@ class Game:
                 self.starting_round(new_roller, roller)
                 if self.user_answer == "q":
                     break
+                ##Cheater method - possible
+                # self.cheat(roller)
                 self.bank()
                 self.is_remaining_dices_zero()
             print(f"Thanks for playing. You earned {self.banker.balance} points")
 
+    # def cheat_anf_fix(self, ):
+    #     self.user_answer = (list(map(int, self.user_answer)))
+
+    #Ahmad Zaid and Mohammad Abumazen
     def got_zilch(self, roll, roller_function):
         """
         This function will check if the rolling dice don't have any scoring dice, if yes zilch message will be printed
