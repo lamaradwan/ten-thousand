@@ -43,3 +43,8 @@ def test_zilch():
     game = Game()
     diffs = diff(game.play, '../tests/version_3/zilcher.sim.txt')
     assert not diffs, diffs
+
+def test_cheat():
+    game = Game()
+    diffs = diff(game.play, '../tests/version_3/cheat_and_fix.sim.txt')
+    assert not diffs, diffs

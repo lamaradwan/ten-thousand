@@ -9,7 +9,7 @@ Enter dice to keep, or (q)uit:
 Cheater!!! Or possibly made a typo...
 *** 5 2 3 5 4 2 ***
 Enter dice to keep, or (q)uit:
-> 5 5
+> 55
 You have 100 unbanked points and 4 dice remaining
 (r)oll again, (b)ank your points or (q)uit:
 > q
