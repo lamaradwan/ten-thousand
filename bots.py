@@ -36,9 +36,10 @@ class BaseBot(ABC):
 
         if self.print_all:
             self.real_print(text)
-        elif text.startswith("Thanks for playing."):
+        if text.startswith("Thanks for playing."):
             score = re.sub("\D", "", text)
             self.total_score += int(score)
+
 
     def _mock_print(self, *args, **kwargs):
         """steps in front of the real builtin print function"""
@@ -113,7 +114,6 @@ class BaseBot(ABC):
 
         for _ in range(num_games):
             player = cls()
-            # player.real_print("tracking")
             game = Game()
             try:
                 game.play()
