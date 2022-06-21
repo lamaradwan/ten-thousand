@@ -92,11 +92,13 @@ class Game:
             print("OK. Maybe another time")
 
         else:
-            while self.user_answer == "r" or self.user_answer == "b" or self.user_answer == 'y':
+            while (self.user_answer == "r" or self.user_answer == "b" or self.user_answer == 'y') and (self.round_counter < 3):
                 new_roller = roller(self.dice_remaining)
                 self.starting_round(new_roller, roller)
                 if self.user_answer == "q":
                     break
+                # if self.round_counter == 5:
+                #     break
                 ##Cheater method - possible
                 # self.cheat(roller)
                 self.bank()

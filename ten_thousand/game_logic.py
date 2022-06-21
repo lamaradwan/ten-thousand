@@ -54,5 +54,23 @@ class GameLogic:
         return tuple
 ###################
 
+    @staticmethod
+    def get_scorers(dice):
+        # print(dice)
+        all_dice_score = GameLogic.calculate_score(dice)
+
+        if all_dice_score == 0:
+            return tuple()
+
+        scores_list = []
+        for i in range(len(dice)):
+            sub_roll = dice[:i] + dice[i + 1:]
+            sub_score = GameLogic.calculate_score(sub_roll)
+            if sub_score != all_dice_score:
+                scores_list.append(dice[i])
+
+        return tuple(scores_list)
+
 if __name__=="__main__":
-    print(GameLogic.calculate_score((1, 6, 3, 2, 5, 4)))
+    pass
+    # print(GameLogic.calculate_score((1, 6, 3, 2, 5, 4)))
