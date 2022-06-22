@@ -10,6 +10,7 @@ from ten_thousand.game_logic import GameLogic
 
 
 class BaseBot(ABC):
+    grand_total = 0
     """Base class for Ten Thousand Game bots"""
 
     def __init__(self, print_all=False):
@@ -39,7 +40,6 @@ class BaseBot(ABC):
         if text.startswith("Thanks for playing."):
             score = re.sub("\D", "", text)
             self.total_score += int(score)
-
 
     def _mock_print(self, *args, **kwargs):
         """steps in front of the real builtin print function"""
@@ -123,11 +123,13 @@ class BaseBot(ABC):
                 pass
 
             mega_total += player.total_score
+            cls.grand_total = mega_total // num_games
             player.reset()
 
         print(
             f"{cls.__name__}: {num_games} games played with average score of {mega_total // num_games}"
         )
+        return mega_total // num_games
 
 
 class NervousNellie(BaseBot):
@@ -138,18 +140,33 @@ class NervousNellie(BaseBot):
 
 
 class YourBot(BaseBot):
+
     def _roll_bank_or_quit(self):
-        """your logic here"""
-        return "b"
+        while NervousNellie.grand_total > YourBot.grand_total:
+            return "b"
 
-    def _enter_dice(self):
-        """simulate user entering which dice to keep.
-        Defaults to all scoring dice"""
+        return 'q'
 
-        return super()._enter_dice()
+
+# @staticmethod
+# def grand_function():
+#     return NervousNellie.grand_total,YourBot.grand_total
+
+def _enter_dice(self):
+    """simulate user entering which dice to keep.
+    Defaults to all scoring dice"""
+
+    return super()._enter_dice()
 
 
 if __name__ == "__main__":
-    num_games = 100
+    num_games = 2
     NervousNellie.play(num_games)
+    # print(NervousNellie.grand_function())
     YourBot.play(num_games)
+    # print(YourBot.grand_function())
+
+    # y = YourBot.play(num_games)
+    # while y < x:
+    #     x = NervousNellie.play(num_games)
+    #     y = YourBot.play(num_games)
