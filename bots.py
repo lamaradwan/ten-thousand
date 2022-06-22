@@ -113,7 +113,7 @@ class BaseBot(ABC):
         mega_total = 0
 
         for _ in range(num_games):
-            player = cls(True)
+            player = cls()
             game = Game()
             try:
                 game.play()
@@ -139,16 +139,13 @@ class NervousNellie(BaseBot):
         return "b"
 
 
-class YourBot(BaseBot):
+class SmartNellie(BaseBot):
 
     def _roll_bank_or_quit(self):
-        return "b"
+        if self.dice_remaining > 2:
+            return "r"
 
-    @staticmethod
-    def check_winning():
-        while NervousNellie.grand_total >= YourBot.grand_total:
-            YourBot.play(num_games)
-            NervousNellie.play(num_games)
+        return "b"
 
     def _enter_dice(self):
         """simulate user entering which dice to keep.
@@ -158,7 +155,6 @@ class YourBot(BaseBot):
 
 
 if __name__ == "__main__":
-    num_games = 2
+    num_games = 100
     NervousNellie.play(num_games)
-    YourBot.play(num_games)
-    YourBot.check_winning()
+    SmartNellie.play(num_games)
