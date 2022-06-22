@@ -1,5 +1,5 @@
-# LAB - Class 08
-## Project: Ten Thousand 3
+# LAB - Class 09
+## Project: Ten Thousand 4
 ### Author: Group 4
 - Lama Radwan
 - Ahmad Zaid
